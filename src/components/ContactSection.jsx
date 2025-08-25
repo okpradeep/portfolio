@@ -9,8 +9,27 @@ import {
   Twitter,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
+import { Description } from "@radix-ui/react-toast";
+import { useState } from "react";
 
 export const ContactSection = () => {
+  const { toast } = useToast();
+  const [isSubmiting, setIsSubmiting] = useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    setIsSubmiting(true);
+
+    setTimeout(() => {
+      toast({
+        title: "Message Sent ! ",
+        description: "Thank for your message. I'll get back to you soon.",
+      });
+      setIsSubmiting(false);
+    }, 1500);
+  };
   return (
     <section id="contact" className="py-24 px-4 relative bg-secondary/30">
       <div className="container mx-auto mx-w-5xl">
@@ -89,7 +108,10 @@ export const ContactSection = () => {
               </div>
             </div>
           </div>
-          <div className="bg-card p-8 rounded-ld shadow-xs">
+          <div
+            className="bg-card p-8 rounded-ld shadow-xs"
+            onSubmit={handleSubmit}
+          >
             <h3 className="text-2xl font-semibold mb-6">Send a Message</h3>
             <form className="space-y-6">
               <div>
@@ -144,12 +166,12 @@ export const ContactSection = () => {
 
               <button
                 type="submit"
+                disabled={isSubmiting}
                 className={cn(
                   "cosmic-button w-full flex items-center justify-center gap-2"
                 )}
               >
-                {" "}
-                Send Message
+                {isSubmiting ? "Sending..." : "Send Message"}
                 <Send size={16} />
               </button>
             </form>
